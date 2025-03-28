@@ -4,9 +4,13 @@ from tronpy import Tron
 from utils.typing import WalletInfo
 
 
-def get_wallet(address: str) -> WalletInfo:
-    """Get wallet information by address"""
-    client = Tron(network='nile')
+def get_wallet(address: str, network: str = 'nile') -> WalletInfo:
+    """Get wallet information by address
+
+    :param network: Which network to connect, one of
+    ``"mainnet"``, ``"shasta"``, ``"nile"``, or ``"tronex"``
+    """
+    client = Tron(network=network)
     if not client.is_address(address):
         raise ValueError("Invalid address format")
     balance_trx = client.get_account_balance(address)
