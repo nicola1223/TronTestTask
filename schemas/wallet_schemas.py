@@ -1,7 +1,7 @@
 """Wallet pydantic schemas"""
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class WalletQueryResponse(BaseModel):
@@ -10,9 +10,9 @@ class WalletQueryResponse(BaseModel):
     address: str
     created_at: datetime
 
-    class Config:
-        """Model configuration"""
-        from_attributes = True
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
 
 class WalletInfoResponse(BaseModel):
@@ -22,9 +22,9 @@ class WalletInfoResponse(BaseModel):
     bandwidth: int
     energy: int
 
-    class Config:
-        """Model configuration"""
-        from_attributes = True
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
 
 class AddressRequest(BaseModel):
