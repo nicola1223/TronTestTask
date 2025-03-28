@@ -1,5 +1,6 @@
 """Tests for application"""
 from datetime import datetime
+from unittest.mock import patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -35,15 +36,16 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def test_db():
     """Provide a test database session"""
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
+    engine.dispose()
 
 
-def test_queries(test_db):
+def test_queries():
     """Unit test for queries"""
     with TestingSessionLocal() as db:
         wallet = Wallet(
@@ -70,3 +72,42 @@ def test_queries(test_db):
         assert saved_wallet.address == 'test_address'
         assert saved_query.address == 'test_address'
         assert saved_wallet.wallet_queries[0].id == saved_query.id
+
+
+def test_wallet_endpoint():
+    """Test wallet endpoint"""
+    mock_response = {
+        'address': 'test_address',
+        'balance_trx': 100,
+        'bandwidth': 50,
+        'energy': 20
+    }
+
+    with patch('api.v1.endpoints.wallets.get_wallet') as mock_service:
+        mock_service.return_value = mock_response
+
+        response = client.post(
+            "v1/wallet/",
+            json={'address': 'test_address'}
+        )
+
+        mock_service.assert_called_once_with('test_address')
+
+        assert response.status_code == 200
+        assert response.json() == mock_response
+
+        with TestingSessionLocal() as db:
+            wallet_query = select(Wallet).limit(1)
+            query_query = select(WalletQuery).limit(1)
+
+            wallet = db.execute(wallet_query).scalar()
+            query = db.execute(query_query).scalar()
+
+            assert wallet.address == 'test_address'
+            assert query.address == 'test_address'
+            assert wallet.balance_trx == 100
+
+        response = client.get('v1/wallet/queries?skip=0&limit=1')
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()[0]['address'] == 'test_address'
