@@ -37,6 +37,7 @@ class Wallet(Base):
     __tablename__ = 'wallets'
     id: Mapped[int] = Column(Integer, primary_key=True)
     address: Mapped[str] = Column(String, nullable=False)
+    balance_trx: Mapped[int] = Column(Integer, nullable=False)
     bandwidth: Mapped[int] = Column(Integer, nullable=False)
     energy: Mapped[int] = Column(Integer, nullable=False)
     wallet_queries: Mapped[List["WalletQuery"]] = relationship(
