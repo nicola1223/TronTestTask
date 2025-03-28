@@ -48,30 +48,3 @@ class Wallet(Base):
         return f'<Wallet {self.address}: '\
                f'Bandwidth: {self.bandwidth} Energy: {self.energy} '\
                f'Queries: {self.wallet_queries}>'
-
-
-from sqlalchemy import select
-
-from database import Session, engine
-
-Base.metadata.create_all(bind=engine)
-with Session() as session:
-    test_wallet = Wallet(
-        address='0x1234567890abcdef',
-        bandwidth=1000,
-        energy=1000
-    )
-    test_query = WalletQuery(
-        address='0x1234567890abcdef'
-    )
-
-    test_query1 = WalletQuery(
-        address='0x1234567890abcdef'
-    )
-
-    session.add_all([test_wallet, test_query, test_query1])
-
-    session.commit()
-    wallets = select(Wallet)
-    for wallet in session.scalars(wallets):
-        print(wallet)
