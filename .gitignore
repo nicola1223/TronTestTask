@@ -176,5 +176,5 @@ cython_debug/
 # VsCode configuration file
 .vscode
 
-# Sqlite databases
-.sqlite3
+# Sqlite test_db
+test_db.sqlite3
