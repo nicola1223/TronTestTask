@@ -6,7 +6,7 @@ from typing import List
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, relationship
 
-from app.core.database import Base
+from core.database import Base
 
 
 class WalletQuery(Base):

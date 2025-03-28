@@ -1,9 +1,10 @@
 """Tron wallet manipulations"""
 from tronpy import Tron
+
 from utils.typing import WalletInfo
 
 
-async def get_wallet(address: str) -> WalletInfo:
+def get_wallet(address: str) -> WalletInfo:
     """Get wallet information by address"""
     client = Tron(network='nile')
     if not client.is_address(address):

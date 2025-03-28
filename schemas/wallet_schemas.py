@@ -12,7 +12,7 @@ class WalletQueryResponse(BaseModel):
 
     class Config:
         """Model configuration"""
-        orm_mode = True
+        from_attributes = True
 
 
 class WalletInfoResponse(BaseModel):
@@ -24,7 +24,7 @@ class WalletInfoResponse(BaseModel):
 
     class Config:
         """Model configuration"""
-        orm_mode = True
+        from_attributes = True
 
 
 class AddressRequest(BaseModel):
