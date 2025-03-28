@@ -45,6 +45,7 @@ def test_db():
     engine.dispose()
 
 
+@pytest.mark.unit
 def test_queries():
     """Unit test for queries"""
     with TestingSessionLocal() as db:
@@ -74,6 +75,7 @@ def test_queries():
         assert saved_wallet.wallet_queries[0].id == saved_query.id
 
 
+@pytest.mark.integration
 def test_wallet_endpoint():
     """Test wallet endpoint"""
     mock_response = {
