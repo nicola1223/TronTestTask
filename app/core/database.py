@@ -12,6 +12,6 @@ engine = create_engine(
     echo=True,
 )
 
-Session = sessionmaker(engine)
+SessionLocal = sessionmaker(engine)
 
 Base = declarative_base()
